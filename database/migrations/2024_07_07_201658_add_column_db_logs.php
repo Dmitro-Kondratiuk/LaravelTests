@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('db_logs', function (Blueprint $table) {
             $table->boolean('send')->default(false);
+
         });
     }
 

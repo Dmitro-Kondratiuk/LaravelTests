@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('header')->nullable('not');
             $table->text('body')->nullable('not');
             $table->timestamps();
+
         });
     }
 

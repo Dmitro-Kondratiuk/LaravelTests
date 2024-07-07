@@ -12,6 +12,7 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             $table->string('first_name')->nullable()->after('id');
             $table->string('last_name')->nullable()->after('first_name');
+
         });
     }
 
