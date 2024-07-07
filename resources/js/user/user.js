@@ -5,6 +5,7 @@ const divElementPagination = document.querySelector('.pagination');
 
 
 let currentPage = 1
+let maxCurrentPage = 1
 buttonAddNewUser.addEventListener('click', function () {
     window.location.href = window.location.origin + "/user/create";
 });
@@ -41,13 +42,15 @@ async function fetchUsers(page = 1) {
        </div>
        </div>`
         }
+
         htmlPagination += `<button class="page-item previous-page">Previous</button>`
-        for (let i = 1; i < countPages; i++) {
+        for (let i = 1; i <= countPages; i++) {
             if (i === page) {
                 htmlPagination += ` <button class="page active" id="button_${i}">${i}</button>`
             } else {
                 htmlPagination += ` <button class="page" id="button_${i}">${i}</button>`
             }
+            maxCurrentPage = i
         }
         htmlPagination += `<button  class="page-item next-page">Next</button>`
         divElementRow.innerHTML = htmlContent;
@@ -79,14 +82,14 @@ function previousPage() {
     const buttonElementPreviousPagination = document.querySelector('.previous-page')
     buttonElementPreviousPagination.addEventListener('click', function () {
         currentPage = currentPage === 1 ? currentPage : currentPage - 1
-        fetchUsers(currentPage);
+        fetchUsers(parseInt(currentPage));
     })
 }
 
 function nexPage() {
     const buttonElementNextPagination = document.querySelector('.next-page')
     buttonElementNextPagination.addEventListener('click', function () {
-        currentPage = currentPage + 1
+        currentPage = parseInt(currentPage) === maxCurrentPage ? parseInt(currentPage) : currentPage + 1
         fetchUsers(currentPage);
     })
 }
