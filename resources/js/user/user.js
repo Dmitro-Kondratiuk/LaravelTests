@@ -42,17 +42,18 @@ async function fetchUsers(page = 1) {
        </div>
        </div>`
         }
-
-        htmlPagination += `<button class="page-item previous-page">Previous</button>`
-        for (let i = 1; i <= countPages; i++) {
-            if (i === page) {
-                htmlPagination += ` <button class="page active" id="button_${i}">${i}</button>`
-            } else {
-                htmlPagination += ` <button class="page" id="button_${i}">${i}</button>`
+        if(htmlContent !== ''){
+            htmlPagination += `<button class="page-item previous-page">Previous</button>`
+            for (let i = 1; i <= countPages; i++) {
+                if (i === page) {
+                    htmlPagination += ` <button class="page active" id="button_${i}">${i}</button>`
+                } else {
+                    htmlPagination += ` <button class="page" id="button_${i}">${i}</button>`
+                }
+                maxCurrentPage = i
             }
-            maxCurrentPage = i
+            htmlPagination += `<button  class="page-item next-page">Next</button>`
         }
-        htmlPagination += `<button  class="page-item next-page">Next</button>`
         divElementRow.innerHTML = htmlContent;
         divElementPagination.innerHTML = htmlPagination;
         document.getElementById('loader').style.display = 'none';
