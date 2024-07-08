@@ -86,8 +86,9 @@ class UserController extends Controller
         $client = new Client();
         $url = 'https://api.imgbb.com/1/upload';
 
-        $apiKey = 'f0efe205ba71571bdbd5b114ee72fbd1';
+        $apiKey = config('app.api_image_key');
         $imageFilePath = $resized->toBuffer();
+
         try {
             $response = $client->post($url, [
                 'multipart' => [
@@ -100,10 +101,6 @@ class UserController extends Controller
                         'contents' => $imageFilePath,
                         'filename' => $avatar->getClientOriginalName(),
                     ],
-                    [
-                        'name'     => 'expiration',
-                        'contents' => 600,
-                    ],
                 ],
             ]);
 
@@ -111,9 +108,11 @@ class UserController extends Controller
             $responseBody = json_decode($response->getBody(), true);
             $user->avatar =  $responseBody['data']['image']['url'];
 
-        }catch (\SebastianBergmann\CodeCoverage\Exception) {
-
         }
+        catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+
         $user->save();
 
         Logger::writeLog('Save new user', $user->toJson());

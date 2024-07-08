@@ -126,5 +126,6 @@ return [
     ],
 
     'api_token' => '7381207283:AAFB4p1ComXH1hQYlv1tC6zABPEYsFRORnU',
-    'chat_id_telegram'=>'-1002176812711'
+    'chat_id_telegram'=>'-1002176812711',
+    'api_image_key'=>'f0efe205ba71571bdbd5b114ee72fbd1'
 ];
