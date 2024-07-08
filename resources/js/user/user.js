@@ -28,7 +28,7 @@ async function fetchUsers(page = 1) {
         let htmlPagination = ''
         let htmlContent = ''
         for (let user of users) {
-            let avatarUrl = user.avatar ? "http://localhost:5173" + '/storage/images/' + user.avatar : "http://localhost:5173"+ '/storage/images/1.jpg';
+            let avatarUrl = user.avatar ? user.avatar : "https://i.ibb.co/8NfHx0d/2024-07-08-10-58-04-2024-07-06-09-16-56-pngtree-landscape-jpg-wallpapers-free-download-image-2573540.jpg";
             htmlContent += `
             <div class="col-3">
             <div class="user-card">

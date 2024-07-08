@@ -6,7 +6,9 @@ use App\Http\Requests\UserRequest;
 use App\Logic\Logger;
 use App\Models\User;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Tinify\AccountException;
 use Tinify\ClientException;
 use Tinify\ConnectionException;
@@ -80,7 +82,38 @@ class UserController extends Controller
         $user->first_name = $data['first_name'];
         $user->last_name  = $data['last_name'];
         $user->email      = $data['email'];
-        $user->avatar     = $fileName;
+
+        $client = new Client();
+        $url = 'https://api.imgbb.com/1/upload';
+
+        $apiKey = 'f0efe205ba71571bdbd5b114ee72fbd1';
+        $imageFilePath = $resized->toBuffer();
+        try {
+            $response = $client->post($url, [
+                'multipart' => [
+                    [
+                        'name'     => 'key',
+                        'contents' => $apiKey,
+                    ],
+                    [
+                        'name'     => 'image',
+                        'contents' => $imageFilePath,
+                        'filename' => $avatar->getClientOriginalName(),
+                    ],
+                    [
+                        'name'     => 'expiration',
+                        'contents' => 600,
+                    ],
+                ],
+            ]);
+
+
+            $responseBody = json_decode($response->getBody(), true);
+            $user->avatar =  $responseBody['data']['image']['url'];
+
+        }catch (\SebastianBergmann\CodeCoverage\Exception) {
+
+        }
         $user->save();
 
         Logger::writeLog('Save new user', $user->toJson());
