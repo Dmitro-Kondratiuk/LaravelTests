@@ -8,15 +8,15 @@ async function addUser(event) {
     let formData = new FormData(form)
     let objectError = {
         emailErrorSpan: document.getElementById('emailError'),
-        first_nameErrorSpan: document.getElementById('first_nameError'),
-        last_nameErrorSpan: document.getElementById('last_nameError'),
-        avatarErrorSpan: document.getElementById('avatarError'),
+        nameErrorSpan: document.getElementById('nameError'),
+        phoneErrorSpan: document.getElementById('phoneError'),
+        photoErrorSpan: document.getElementById('photoError'),
+        positionErrorSpan: document.getElementById('positionError'),
     }
 
     for(let errorEntity of Object.values(objectError) ){
         errorEntity.textContent = ''
     }
-
 
     try {
         document.getElementById('loader').style.display = 'block';
@@ -34,14 +34,18 @@ async function addUser(event) {
                 if(error.response.data.errors.email){
                     objectError.emailErrorSpan.textContent = error.response.data.errors.email
                 }
-                if (error.response.data.errors.first_name) {
-                    objectError.first_nameErrorSpan.textContent = error.response.data.errors.first_name
+                if (error.response.data.errors.name) {
+                    objectError.nameErrorSpan.textContent = error.response.data.errors.name
                 }
-                if (error.response.data.errors.last_name) {
-                    objectError.last_nameErrorSpan.textContent = error.response.data.errors.last_name
+                if (error.response.data.errors.photo) {
+                    objectError.photoErrorSpan.textContent = error.response.data.errors.photo
+
                 }
-                if (error.response.data.errors.avatar) {
-                    objectError.avatarErrorSpan.textContent = error.response.data.errors.avatar
+                if (error.response.data.errors.phone) {
+                    objectError.phoneErrorSpan.textContent = error.response.data.errors.phone
+                }
+                if (error.response.data.errors.position_id) {
+                    objectError.positionErrorSpan.textContent = error.response.data.errors.position_id
                 }
             }
         }

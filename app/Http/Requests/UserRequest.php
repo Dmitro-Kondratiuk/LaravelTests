@@ -20,10 +20,19 @@ class UserRequest extends FormRequest
      */
     public function rules(): array {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name'  => 'required|string|max:255',
-            'email'      => 'required|string|email|max:255|unique:users',
-            'avatar'     => 'required|file|mimes:jpg,jpeg|max:5120',
+            'name'        => 'required|string|max:255',
+            'phone'       => 'required|string|max:255|regex:/^\+380\d{9}$/',
+            'position_id' => 'required|integer',
+            'email'       => 'required|string|email|max:255|unique:users',
+            'photo'       => 'required|file|mimes:jpg,jpeg|max:5120',
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'phone.regex'        => 'Invalid phone number format. Please use the format +380XXXXXXXXX.',
+            'position_id.required' => 'Please select a position',
+            // Добавьте другие сообщения об ошибках по мере необходимости
         ];
     }
 }

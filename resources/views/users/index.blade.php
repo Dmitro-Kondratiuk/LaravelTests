@@ -10,6 +10,8 @@
     <div id="user-list"></div>
     <x-show-more-users id="pagination-controls" class="mt-3" >Show more</x-show-more-users>
     <div class="container" >
+        <div class="positions">
+        </div>
         <div class="row custom-row">
         </div>
         <div class="pagination">

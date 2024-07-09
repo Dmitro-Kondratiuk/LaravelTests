@@ -18,7 +18,7 @@
 .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 20px; /* Примерный отступ сверху */
+    margin-top: 20px;
 }
 
 .pagination button {
@@ -58,12 +58,12 @@
 .row {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Отступ между карточками */
-    justify-content: center; /* Центрирование элементов по горизонтали */
+    gap: 20px;
+    justify-content: center;
 }
 
 .col {
-    width: calc(33.33% - 40px); /* Ширина колонки с учетом отступов */
+    width: calc(33.33% - 40px);
     margin-bottom: 20px;
     padding: 20px;
     box-sizing: border-box;
@@ -78,7 +78,8 @@
     width: auto;
 }
 
-.user-card img {
+.user-card img,
+.card-profile img {
     width: 70px;
     height: 70px;
     border-radius: 50%;
@@ -108,4 +109,46 @@
 }
 #link {
     text-decoration:none;
+}
+.block {
+    width: 100px;
+    height: 50px;
+    background-color: #f0f0f0;
+    text-align: center;
+    line-height: 50px;
+}
+.block a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    height: 100%;
+}
+.block {
+    display: inline-block;
+    width: calc(20% - 10px);
+    margin-right: 10px;
+    text-align: center;
+    background: white;
+    padding: 10px;
+    box-sizing: border-box;
+    line-height: 50px;
+}
+.block:last-child {
+    margin-right: 0px;
+}
+.block a {
+    text-decoration: none;
+    color: #333;
+}
+.button-like-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.button-like-link:hover {
+    text-decoration: none;
 }

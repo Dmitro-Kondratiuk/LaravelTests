@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Logic\Helper\UsersHelper;
 use App\Logic\Logger;
+use App\Models\Positions;
 use App\Models\User;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Tinify\AccountException;
 use Tinify\ClientException;
 use Tinify\ConnectionException;
@@ -16,13 +18,16 @@ use Tinify\ServerException;
 
 class UserController extends Controller
 {
-    public function index(Request $request) {
+    const PER_PAGE = 6;
+
+    public function index() {
 
         return view('users.index');
     }
 
     public function create() {
-        return view('users.create');
+        $positions = Positions::all();
+        return view('users.create',compact('positions'));
     }
 
     /**
@@ -32,16 +37,16 @@ class UserController extends Controller
      * @throws ConnectionException
      * @throws Exception
      */
-    public function add(UserRequest $request) {
+    public function add(UserRequest $request): JsonResponse {
         $data     = $request->all();
-        $avatar   = $data['avatar'];
-        $fileName = $avatar->getClientOriginalName();
+        $photo    = $data['photo'];
+        $fileName = $photo->getClientOriginalName();
         $fileName = date('Y-m-d-h-i-s') . '-' . $fileName;
 
         try {
             \Tinify\setKey(env('TINIFY_KEY'));
-            $source = \Tinify\fromFile($avatar->getRealPath());
-            $source->toFile($avatar->getRealPath());
+            $source = \Tinify\fromFile($photo->getRealPath());
+            $source->toFile($photo->getRealPath());
             $resized = $source->resize([
                 "method" => "cover",
                 "width"  => 70,
@@ -78,10 +83,11 @@ class UserController extends Controller
             throw new Exception("The error message is: " . $e->getMessage());
         }
 
-        $user             = new User();
-        $user->first_name = $data['first_name'];
-        $user->last_name  = $data['last_name'];
-        $user->email      = $data['email'];
+        $user              = new User();
+        $user->name        = $data['name'];
+        $user->phone       = $data['phone'];
+        $user->email       = $data['email'];
+        $user->position_id = $data['position_id'];
 
         $client = new Client();
         $url = 'https://api.imgbb.com/1/upload';
@@ -99,14 +105,14 @@ class UserController extends Controller
                     [
                         'name'     => 'image',
                         'contents' => $imageFilePath,
-                        'filename' => $avatar->getClientOriginalName(),
+                        'filename' => $photo->getClientOriginalName(),
                     ],
                 ],
             ]);
 
 
             $responseBody = json_decode($response->getBody(), true);
-            $user->avatar =  $responseBody['data']['image']['url'];
+            $user->photo =  $responseBody['data']['image']['url'];
 
         }
         catch (Exception $e) {
@@ -119,18 +125,23 @@ class UserController extends Controller
         return response()->json('/')->cookie('success','User created!',0.05);
     }
 
-    public function getUsers(Request $request) {
+    public function getUsers(Request $request): JsonResponse {
 
-        $page = $request->query('page', 1);
-
-        $perPage = 6;
-
-        $users = User::skip(($page - 1) * $perPage)->take($perPage)->get();
-
-        $totalUsers = User::count();
-        $countPages = ceil($totalUsers / $perPage);
-
-        $response = ['users' => $users, 'countPages' => $countPages];
+        $page       = $request->query('page', 1);
+        $response   = UsersHelper::getUsersTable($page, self::PER_PAGE);
+        $response['positions'] = Positions::all();
         return response()->json($response);
+    }
+    public function getPositionsUsers(Request $request): JsonResponse {
+
+        $position_id = (int)$request->query('position_id');
+        $page        = (int)$request->query('page', 1);
+        $response    = UsersHelper::getUsersTable($page, self::PER_PAGE, $position_id);
+
+        return response()->json($response);
+    }
+    public function show($id) {
+        $user = User::find($id);
+        return view('users.show',compact('user'));
     }
 }
