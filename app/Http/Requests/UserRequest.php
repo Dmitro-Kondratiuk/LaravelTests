@@ -32,7 +32,6 @@ class UserRequest extends FormRequest
         return [
             'phone.regex'        => 'Invalid phone number format. Please use the format +380XXXXXXXXX.',
             'position_id.required' => 'Please select a position',
-            // Добавьте другие сообщения об ошибках по мере необходимости
         ];
     }
 }

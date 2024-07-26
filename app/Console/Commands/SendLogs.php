@@ -21,7 +21,7 @@ class SendLogs extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Send logs to telegram';
 
     /**
      * Execute the console command.
